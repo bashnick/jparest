@@ -26,11 +26,9 @@ public class Application {
     public CommandLineRunner demo(UserRepository repository){
         return (args) -> {
             //save users
-            repository.save(new User("Jack", "Bauer", "admin"));
-            repository.save(new User("Chloe", "O'Brian", "user"));
-            repository.save(new User("Kim", "Bauer", "user"));
-            repository.save(new User("David", "Palmer", "user"));
-            repository.save(new User("Michelle", "Dessler", "user"));
+            repository.save(new User("admin", "admin", "admin", "admin@mail.ru", "ADMIN"));
+            repository.save(new User("Jack", "Bauer", "jackB", "jack@mail.ru", "USER"));
+            repository.save(new User("Chloe", "O'Brian", "chloeO", "chloe@mail.ru", "USER"));
 
             //fetch all users
             log.info("Users found with findAll():");
@@ -38,13 +36,6 @@ public class Application {
             for (User user : repository.findAll()) {
                 log.info(user.toString());
             }
-            log.info("");
-
-            //fetch an individual user by ID
-            User customer = repository.findOne(17L);
-            log.info("User found with findOne(17L):");
-            log.info("--------------------------------");
-            log.info(customer.toString());
             log.info("");
 
             //fetch customers by last name

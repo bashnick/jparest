@@ -10,13 +10,18 @@ public class WebController {
     @Autowired
     UserRepository repository;
 
+    @RequestMapping("/login")
+    public String login(@RequestParam("login") String login){
+        String result = "<html>Hello ";
+        result += repository.findByLogin(login).toString();
+        return result +"</html>";
+    }
+
+
     @RequestMapping("/save")
     public String process(){
-        repository.save(new User("Jack", "Smith", "user"));
-        repository.save(new User("Adam", "Johnson", "user"));
-        repository.save(new User("Kim", "Smith", "user"));
-        repository.save(new User("David", "Williams", "user"));
-        repository.save(new User("Peter", "Davis", "user"));
+        repository.save(new User("Jack", "Smith", "jackS","jacks@mail.ru", "USER"));
+        repository.save(new User("Adam", "Johnson", "adamJ", "adam@mail.ru", "USER"));
         return "Done";
     }
 
