@@ -1,63 +1,66 @@
 package init;
 
 import javax.persistence.*;
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "user_table")
 public class User
 {
     @Id
-    @GeneratedValue (strategy= GenerationType.AUTO)
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "firstname")
-    private String firstName;
+    @Column
+    private String firstname;
 
-    @Column(name = "lastname")
-    private String lastName;
+    @Column
+    private String lastname;
 
-    @Column(name = "login")
+    @Column
     private String login;
 
-    @Column(name = "email")
+    @Column
+    private String password;
+
+    @Column
     private String email;
 
-    @Column(name = "role")
+    @Column
     private String role;
 
     protected User() {}
 
-    public User(String firstName, String lastName, String login, String email, String role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.login = login;
+    public User(String firstname, String lastname, String username, String password, String email, String role) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.login = username;
+        this.password = password;
         this.email = email;
         this.role = role;
-    }
-
-    public Long getId() {
-        return this.id;
     }
 
     @Override
     public String toString(){
         return String.format(
-            "User[id=%d, firstName='%s', lastName='%s', login='%s', email='%s', role='%s']",
-            id, firstName, lastName, login, email, role
+            "User[id=%d, firstname='%s', lastname='%s', login='%s', password='%s', email='%s', role='%s']",
+            id, firstname, lastname, login, password, email, role
         );
     }
 
-    public Object toArray() {
-        ArrayList<String> list = new ArrayList<String>();
-        list.add(firstName);
-        list.add(lastName);
-        list.add(login);
-        list.add(email);
-        list.add(email);
-        list.add(role);
-        return list;
-    }
+    //setters
+    public void setFirstname(String firstname){ this.firstname = firstname; }
+    public void setLastname(String lastname){ this.lastname = lastname; }
+    public void setLogin(String username){ this.login = username; }
+    public void setPassword(String password){ this.password = password; }
+    public void setEmail(String email){ this.email = email; }
+    public void setRole(String role){ this.role = role; }
+
+    //getters
+    public Long getId() { return this.id; }
+    public String getFirstname(){ return this.firstname; }
+    public String getLastname(){ return this.lastname; }
+    public String getLogin(){ return this.login; }
+    public String getPassword(){ return this.password; }
+    public String getEmail(){ return this.email; }
+    public String getRole(){ return this.role; }
 }

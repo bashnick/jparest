@@ -25,26 +25,24 @@ public class Application {
     @Bean
     public CommandLineRunner demo(UserRepository repository){
         return (args) -> {
-            //save users
-            repository.save(new User("admin", "admin", "admin", "admin@mail.ru", "ADMIN"));
-            repository.save(new User("Jack", "Bauer", "jackB", "jack@mail.ru", "USER"));
-            repository.save(new User("Chloe", "O'Brian", "chloeO", "chloe@mail.ru", "USER"));
-
-            //fetch all users
-            log.info("Users found with findAll():");
+            //save admin
+/*
+            log.info("Saving admin:");
+            User admin = new User("admin", "admin", "admin", "123", "admin@mail.ru", "ADMIN");
+            repository.save(admin);
             log.info("-------------------------------");
-            for (User user : repository.findAll()) {
-                log.info(user.toString());
-            }
-            log.info("");
 
-            //fetch customers by last name
-            log.info("User found with findByLastName('Bauer'):");
-            log.info("--------------------------------------------");
-            for (User bauer : repository.findByLastName("Bauer")) {
-                log.info(bauer.toString());
+            log.info("Saving regular user:");
+            User user = new User("Adam ", "Smith", "user", "321", "user@mail.ru", "USER");
+            repository.save(user);
+            log.info("-------------------------------");
+*/
+
+            log.info("Users found with findAll():");
+            for (User usr : repository.findAll()) {
+                log.info(usr.toString());
             }
-            log.info("");
+            log.info("-------------------------------");
         };
     }
 }
