@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class UserRestController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView loginForm(@RequestParam("username") String username, @RequestParam ("password") String password) throws ServletException, IOException {
         String validateUser = validateUser(username, password);
-        log.info("validateUser: ");
+        log.info("User is determined as: ");
         log.info(validateUser);
         if(validateUser.equals("ADMIN")) return new ModelAndView("redirect:/admin/login");
         else if(validateUser.equals("USER")) return new ModelAndView("redirect:/user/login");
@@ -58,7 +60,9 @@ public class UserRestController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveInitial(@RequestBody User user) {
+    public String saveInitial(@RequestBody User user) throws NoSuchAlgorithmException {
+        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(user.getPassword());
+        user.setPassword(sha256hex);
         repository.save(user);
         return "User saved";
     }
@@ -80,11 +84,9 @@ public class UserRestController {
     }
 
     private String validateUser(String username, String password) {
-        log.info("Validate user: ##username: ");
-        log.info(username);
-        log.info(password);
-        log.info(String.valueOf(repository.findByLogin(username).getPassword().equals(password)));
-        if(this.repository.findByLogin(username).getPassword().equals(password)){
+        log.info("Validating user");
+        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+        if(this.repository.findByLogin(username).getPassword().equals(sha256hex)){
             if(this.repository.findByLogin(username).getRole().equals("ADMIN")) return "ADMIN";
             else if(this.repository.findByLogin(username).getRole().equals("USER")) return "USER";
             else return "UNKNOWN ROLE";
