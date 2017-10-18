@@ -6,16 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
-import java.util.List;
 
 @RestController
 public class UserRestController {
@@ -59,13 +52,18 @@ public class UserRestController {
         return result;
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveInitial(@RequestBody User user) throws NoSuchAlgorithmException {
-        String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(user.getPassword());
-        user.setPassword(sha256hex);
-        repository.save(user);
-        return "User saved";
+
+   @RequestMapping(value = "/newuser", method = RequestMethod.POST)
+    public String saveNewUser(@RequestBody User user) throws NoSuchAlgorithmException {
+        if(repository.findByLogin(user.getLogin()).isEmpty()){
+            String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(user.getPassword());
+            user.setPassword(sha256hex);
+            repository.save(user);
+            return "New user saved";
+        }
+        else return "User with such username already exists";
     }
+
 
     @RequestMapping("/findbyusername")
     public String finById(@RequestParam("username") String username){
@@ -86,9 +84,9 @@ public class UserRestController {
     private String validateUser(String username, String password) {
         log.info("Validating user");
         String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-        if(this.repository.findByLogin(username).getPassword().equals(sha256hex)){
-            if(this.repository.findByLogin(username).getRole().equals("ADMIN")) return "ADMIN";
-            else if(this.repository.findByLogin(username).getRole().equals("USER")) return "USER";
+        if(this.repository.findByLogin(username).get(0).getPassword().equals(sha256hex)){
+            if(this.repository.findByLogin(username).get(0).getRole().equals("ADMIN")) return "ADMIN";
+            else if(this.repository.findByLogin(username).get(0).getRole().equals("USER")) return "USER";
             else return "UNKNOWN ROLE";
         }
         else return "LOGINERROR";
