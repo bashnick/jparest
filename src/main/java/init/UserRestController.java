@@ -53,7 +53,7 @@ public class UserRestController {
     }
 
 
-   @RequestMapping(value = "/newuser", method = RequestMethod.POST)
+   @RequestMapping(value = "/newusr", method = RequestMethod.POST)
     public String saveNewUser(@RequestBody User user) throws NoSuchAlgorithmException {
         if(repository.findByLogin(user.getLogin()).isEmpty()){
             String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(user.getPassword());
@@ -84,7 +84,8 @@ public class UserRestController {
     private String validateUser(String username, String password) {
         log.info("Validating user");
         String sha256hex = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-        if(this.repository.findByLogin(username).get(0).getPassword().equals(sha256hex)){
+        if(repository.findByLogin(username).isEmpty()) return "LOGINERROR";
+        else if(this.repository.findByLogin(username).get(0).getPassword().equals(sha256hex)){
             if(this.repository.findByLogin(username).get(0).getRole().equals("ADMIN")) return "ADMIN";
             else if(this.repository.findByLogin(username).get(0).getRole().equals("USER")) return "USER";
             else return "UNKNOWN ROLE";
