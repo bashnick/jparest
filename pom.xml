@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bashlykov</groupId>
-    <artifactId>jpa-rest</artifactId>
+    <artifactId>auth-service</artifactId>
     <version>1.01</version>
     
     <parent>
