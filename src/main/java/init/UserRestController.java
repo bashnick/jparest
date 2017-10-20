@@ -10,7 +10,7 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
-//test//test
+//test
 @RestController
 public class UserRestController {
 
